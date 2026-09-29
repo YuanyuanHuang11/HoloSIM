@@ -1,7 +1,3 @@
-%% HoloSIM_main_fixedSIM_pixelIntegration_noAffine.m
-% H_inc and final phase-response analysis using the real SIM pipeline.
-%
-% This script keeps H_tra separate conceptually but uses film-plane holograms
 % to evaluate:
 %   1) H_inc-like hologram readout response:
 %        I_holo,film -> real SIM reconstruction -> I_holo,SIM
