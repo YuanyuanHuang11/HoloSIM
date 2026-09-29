@@ -1,0 +1,14 @@
+原外部SIM函数默认已存在于MATLAB path：
+PsfOtf.m
+OTF.m
+SIMimagesF.m
+PCMseparateF.m
+OBJpowerPara.m
+PCMfilteringF.m
+OTFdoubling.m
+MergingHeptaletsF.m
+
+Sparse任务另需 sparse_main.m 及其完整依赖。
+请保留原工具包的内部依赖和版本；本清单列出直接调用入口。
+TwoPoint采用原理论SIM读出，不调用上述PCM外部函数。
+图像处理/绘图等MATLAB工具箱要求沿用源代码。
