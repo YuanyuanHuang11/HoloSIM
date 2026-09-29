@@ -1,5 +1,5 @@
-function [fDof,fDp2,fDm2,npDo,npDp,npDm,Mm,DoubleMatSize,fixedParams]...
-    = PCMfilteringF(fDo,fDp,fDm,OTFo,OBJparaA,kA,fixedParams)
+function [fDof,fDp2,fDm2,npDo,npDp,npDm,Mm,DoubleMatSize]...
+    = PCMfilteringF(fDo,fDp,fDm,OTFo,OBJparaA,kA)
 
 % AIM: obtaining Wiener Filtered estimates of noisy frequency components
 % INPUT VARIABLES
@@ -13,10 +13,6 @@ function [fDof,fDp2,fDm2,npDo,npDp,npDm,Mm,DoubleMatSize,fixedParams]...
 %   Mm: illumination modulation factor
 %   DoubleMatSize: parameter for doubling FT size if necessary
 
-calibrate = nargin < 7 || isempty(fixedParams);
-if ~calibrate
-    assert(isequal(size(fDo),size(fixedParams.Wo)), 'Cached Wiener dimensions differ.');
-end
 w = size(OTFo,1);
 wo = w/2;
 x = linspace(0,w-1,w);
@@ -35,19 +31,10 @@ Bobj = OBJparaA(2);
 % Wiener Filtering central frequency component
 SFo = 1;
 co = 1.0; 
-if calibrate
-    [fDof,npDo] = WoFilterCenter(fDo,OTFo,co,OBJparaA,SFo);
-else
-    fDof = fDo .* fixedParams.Wo;
-    npDo = fixedParams.npDo;
-end
+[fDof,npDo] = WoFilterCenter(fDo,OTFo,co,OBJparaA,SFo);
 
 % modulation factor determination
-if calibrate
-    Mm = ModulationFactor(fDp,kA,OBJparaA,OTFo);
-else
-    Mm = fixedParams.Mm;
-end
+Mm = ModulationFactor(fDp,kA,OBJparaA,OTFo);
 
 %% Duplex power (default)
 kv = kA(2) + 1i*kA(1); % vector along illumination direction
@@ -67,25 +54,8 @@ OBJm(wo+1-k3(1),wo+1-k3(2)) = 0.25*OBJm(wo+2-k3(1),wo+1-k3(2))...
 
 % Filtering side lobes (off-center frequency components)
 SFo = Mm;
-if calibrate
-    [fDpf,npDp] = WoFilterSideLobe(fDp,OTFo,co,OBJm,SFo);
-    [fDmf,npDm] = WoFilterSideLobe(fDm,OTFo,co,OBJp,SFo);
-    if nargout >= 9
-    % Cache the actual pointwise Wiener multipliers before padding/shifting.
-    fixedParams.Wo = cacheMultiplier(fDof,fDo);
-    fixedParams.Wp = cacheMultiplier(fDpf,fDp);
-    fixedParams.Wm = cacheMultiplier(fDmf,fDm);
-    fixedParams.npDo = npDo;
-    fixedParams.npDp = npDp;
-    fixedParams.npDm = npDm;
-    fixedParams.Mm = Mm;
-    end
-else
-    fDpf = fDp .* fixedParams.Wp;
-    fDmf = fDm .* fixedParams.Wm;
-    npDp = fixedParams.npDp;
-    npDm = fixedParams.npDm;
-end
+[fDpf,npDp] = WoFilterSideLobe(fDp,OTFo,co,OBJm,SFo);
+[fDmf,npDm] = WoFilterSideLobe(fDm,OTFo,co,OBJp,SFo);
 
 %% doubling Fourier domain size if necessary
 DoubleMatSize = 0;
@@ -134,12 +104,7 @@ k2 = sqrt(kA*kA');
 Zmask = (Ro < 0.8*k2).*(Rp < 0.8*k2);
 
 % corrective phase
-if calibrate
-    Angle0 = angle( sum(sum( fDof.*conj(fDp1).*Zmask )) );
-    fixedParams.Angle0 = Angle0;
-else
-    Angle0 = fixedParams.Angle0;
-end
+Angle0 = angle( sum(sum( fDof.*conj(fDp1).*Zmask )) );
 
 % phase correction
 fDp2 = exp(+1i*Angle0).*fDp1;
@@ -148,16 +113,3 @@ fDm2 = exp(-1i*Angle0).*fDm1;
 
 
 
-
-end
-
-function W = cacheMultiplier(filtered,raw)
-% No inverse mixing model: retain each Wiener coefficient at its own bin.
-% An exactly zero calibration bin cannot identify a multiplier; keep it zero.
-    W = zeros(size(raw),'like',filtered);
-    valid = raw ~= 0;
-    W(valid) = filtered(valid)./raw(valid);
-    assert(all(isfinite(W(:))), 'Nonfinite cached Wiener coefficient.');
-    assert(all(abs(filtered(~valid)) <= eps), ...
-        'Wiener helper is not pointwise: nonzero output at zero input.');
-end

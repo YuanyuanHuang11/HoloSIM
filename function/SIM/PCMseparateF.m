@@ -1,5 +1,5 @@
-function [fDo,fDp,fDm,kA,fixedParams]...
-    = PCMseparateF(S1aTnoisy,S2aTnoisy,S3aTnoisy,OTFo,fixedParams)
+function [fDo,fDp,fDm,kA]...
+    = PCMseparateF(S1aTnoisy,S2aTnoisy,S3aTnoisy,OTFo)
 % AIM: obtaining the noisy estimates of three frequency components
 % INPUT VARIABLES
 %   S1aTnoisy,S2aTnoisy,S3aTnoisy: 3 raw SIM images with identical 
@@ -14,8 +14,6 @@ function [fDo,fDp,fDm,kA,fixedParams]...
 w = size(S1aTnoisy,1);
 wo = w/2;
 
-% Optional cache: original four-input calls still estimate as before.
-if nargin < 5 || isempty(fixedParams)
 %% Determination of illumination frequency vectors
 [k1a] = IlluminationFreqF(S1aTnoisy,OTFo);
 [k2a] = IlluminationFreqF(S2aTnoisy,OTFo);
@@ -29,14 +27,9 @@ kA = (k1a + k2a + k3a)/3;
 [phase2A] = IlluminationPhaseF(S2aTnoisy,kA);
 [phase3A] = IlluminationPhaseF(S3aTnoisy,kA);
 
-    fixedParams.kA = kA;
-    fixedParams.phaseA = [phase1A; phase2A; phase3A];
-else
-    kA = fixedParams.kA;
-    phase1A = fixedParams.phaseA(1);
-    phase2A = fixedParams.phaseA(2);
-    phase3A = fixedParams.phaseA(3);
-end
+% for display in command window
+phaseA = [phase1A; phase2A; phase3A];
+phaseA*180/pi
 
 % computing PSFe for edge tapering SIM images
 PSFd = real(fftshift( ifft2(fftshift(OTFo.^3)) ));
