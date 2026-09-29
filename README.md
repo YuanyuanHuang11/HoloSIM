@@ -4,10 +4,6 @@ HoloSIM is a computational framework for label-free super-resolution
 quantitative phase microscopy by combining holographic recording with
 structured illumination microscopy (SIM).
 
-## Overview
-
-Brief introduction to the HoloSIM framework.
-
 ## Principle
 
 Brief description of:
@@ -16,18 +12,6 @@ Brief description of:
 3. SIM readout
 4. Phase retrieval
 5. Sparse reconstruction
-
-## Repository Structure
-
-Description of the main folders and MATLAB files.
-
-## Requirements
-
-- MATLAB
-
-## Usage
-
-Instructions for running the simulations and reconstruction.
 
 ## Examples
 
