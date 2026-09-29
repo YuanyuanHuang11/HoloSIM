@@ -6,7 +6,6 @@ structured illumination microscopy (SIM).
 
 ## Principle
 
-Brief description of:
 1. Holographic recording
 2. Near-field transfer
 3. SIM readout
@@ -28,9 +27,7 @@ The simulations and reconstruction algorithms were implemented in MATLAB.
 
 Recommended environment:
 
-- MATLAB R20xx or later
-- Image Processing Toolbox
-- Signal Processing Toolbox
+- MATLAB
 
 ## Usage
 
