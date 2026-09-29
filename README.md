@@ -36,11 +36,7 @@ Recommended environment:
 
 1. Clone or download this repository.
 2. Open MATLAB.
-3. Add the repository and its subfolders to the MATLAB path:
-
-```matlab
-addpath(genpath(pwd));
-
+3. Add the repository and its subfolders to the MATLAB path
 
 ## Main Parameters
 
