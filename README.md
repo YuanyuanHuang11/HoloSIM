@@ -38,6 +38,26 @@ Examples for:
 - PSI reconstruction
 - Off-axis reconstruction
 
+## Requirements
+
+The simulations and reconstruction algorithms were implemented in MATLAB.
+
+Recommended environment:
+
+- MATLAB R20xx or later
+- Image Processing Toolbox
+- Signal Processing Toolbox
+
+## Usage
+
+1. Clone or download this repository.
+2. Open MATLAB.
+3. Add the repository and its subfolders to the MATLAB path:
+
+```matlab
+addpath(genpath(pwd));
+
+
 ## Main Parameters
 
 - Wavelength: 488 nm
