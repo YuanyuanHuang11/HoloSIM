@@ -14,7 +14,6 @@ structured illumination microscopy (SIM).
 
 ## Examples
 
-Examples for:
 - Siemens-star simulation
 - Two-point resolution simulation
 - LSEC phantom simulation
