@@ -15,7 +15,7 @@ params.dx = 32.5e-9;             % 像素大小 (m)
 params.dy = 32.5e-9;             
 params.lambda = 405e-9; 
 params.SIM_lambda = 488e-9;
-params.save_path = fullfile(task_dir, 'results', 'HoloSIM_Offaixs_Siements');
+params.save_path = fullfile(task_dir, 'results', 'HoloSIM_Offaixs_Siemens');
 params.noise_level = 0.01;       
 params.NA_SIM = 1.2;   
 params.dx_gt = 2.5e-9;   % 高分辨率GT网格，仅用于生成样本
@@ -23,7 +23,7 @@ params.dx_gt = 2.5e-9;   % 高分辨率GT网格，仅用于生成样本
 % -------------------------------------------------------------------------
 % Reconstruction / export control
 % -------------------------------------------------------------------------
-params.recon.bg_fit_order = 'plane';          % 推荐 plane，避免 quadratic 过拟合 Siemens 大尺度相位
+params.recon.bg_fit_order = 'plane';          
 params.recon.bg_margin_px = 30;               % 离星靶外边界的背景安全距离
 params.recon.carrier_search_radius_px = 6;    % 离轴 +1 级局部寻峰范围
 params.recon.remove_debug_figures = true;     % 不再保存调试频谱 figure，避免 MATLAB 图窗卡顿
@@ -42,12 +42,8 @@ params.sim.illum_period_nm = 300;
 params.sim.snr = 20;                           % 保留原始代码设置；如需降噪可手动调高到 60
 params.sim.mod_factor = 0.8;                   % 保留原始代码设置
 params.sim.downsample_scale = 0.5;
-% 以下 known_* 字段不参与当前重建，仅保留为兼容旧版本参数结构。
-params.sim.known_angles_deg = [0, 60, 120];
-params.sim.known_k_sign = 1;
-params.sim.known_phase_steps_rad = [0, 2*pi/3, 4*pi/3];
 
-% 避免 print/exportgraphics/saveas 卡顿；使用 imwrite 直接保存 PNG/TIF
+
 params.plot.enable_figure_export = false;
 params.plot.save_direct_png_tif = true;
 params.plot.save_intermediate_png = true;
