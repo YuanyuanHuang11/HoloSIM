@@ -21,6 +21,17 @@ Examples for:
 - PSI reconstruction
 - Off-axis reconstruction
 
+## Main Scripts
+
+| Script | Description |
+|---|---|
+| `HoloSIM_PSI_Siemens.m` | Siemens-star simulation and reconstruction using phase-shifting interferometry (PSI). |
+| `HoloSIM_PSI_TwoPoints.m` | Two-point phase-resolution simulation using PSI. |
+| `HoloSIM_PSI_LSEC.m` | Reconstruction of the simulated LSEC-like thin-phase phantom using PSI-based HoloSIM. |
+| `HoloSIM_PSI_MultiPattern.m` | HoloSIM simulation using multiple structured illumination patterns. |
+| `HoloSIM_OffAxis_Siemens.m` | Siemens-star reconstruction using the off-axis HoloSIM configuration. |
+| `SparseHoloSIM_PSI_LSEC.m` | Sparse refinement of the PSI-based HoloSIM reconstruction for the LSEC-like phantom. |
+
 ## Requirements
 
 The simulations and reconstruction algorithms were implemented in MATLAB.
