@@ -1,4 +1,3 @@
-%% HoloSIM_main_fixedSIM_pixelIntegration_noAffine.m
 % H_inc and final phase-response analysis using the real SIM pipeline.
 %
 % This script keeps H_tra separate conceptually but uses film-plane holograms
@@ -62,7 +61,7 @@ Ccol.gray   = PSI_hex2rgb('#7A7A7A');
 Ccol.lightgray = PSI_hex2rgb('#D9D9D9');
 
 % outdir = fullfile(pwd, 'HoloSIM_main_fixedSIM_pixelIntegration_noAffine_results_z10');
-outdir = fullfile(task_dir, 'results', 'HoloSIM_PSI_Siements');
+outdir = fullfile(task_dir, 'results', 'HoloSIM_PSI_Siemens');
 if ~exist(outdir, 'dir'), mkdir(outdir); end
 
 %% Parameters matching the previously stable Siemens SIM reconstruction
