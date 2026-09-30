@@ -1,4 +1,3 @@
-%% HoloSIM_twoPoint_resolution_only.m
 % Two-point phase-dip resolution simulation using the full HoloSIM pipeline.
 %
 % This standalone script intentionally skips the Siemens-star, H_inc
@@ -49,8 +48,7 @@ Ccol.red    = PSI_hex2rgb('#D55E00');
 Ccol.gray   = PSI_hex2rgb('#7A7A7A');
 Ccol.lightgray = PSI_hex2rgb('#D9D9D9');
 
-% outdir = fullfile(pwd, 'HoloSIM_twoPoint_resolution_results_z10');
-outdir = fullfile(task_dir, 'results', 'HoloSIM_PSI_two_point');
+outdir = fullfile(task_dir, 'results', 'HoloSIM_PSI_TwoPoint');
 if ~exist(outdir, 'dir'), mkdir(outdir); end
 
 %% Optical / reconstruction parameters
