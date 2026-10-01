@@ -1,6 +1,6 @@
 %% ========================================================================
 %  FINAL VERSION: fixed phase colorbar [0,1.2] rad, yellow-green Nature colormap, Arial colorbar
-%  MATLAB脚本：单帧离轴全息 + SIM + 双向频域融合
+%  ：single-frame offaxis + SIM
 % ========================================================================
 clear all; close all; clc;
 task_dir = fileparts(mfilename('fullpath'));
@@ -8,17 +8,17 @@ project_root = fileparts(task_dir);
 addpath(genpath(fullfile(project_root, 'function')));
 
 
-%% 1. 定义公共参数
-fprintf('>>> 流程步骤：定义参数\n');
-params.N = 1024;                 % 图像尺寸
-params.dx = 32.5e-9;             % 像素大小 (m)
+%% 1. parameter
+fprintf('>>> Process: Define parameters \n');
+params.N = 1024;                 % image pixel
+params.dx = 32.5e-9;             % pixel size (m)
 params.dy = 32.5e-9;             
 params.lambda = 405e-9; 
 params.SIM_lambda = 488e-9;
 params.save_path = fullfile(task_dir, 'results', 'HoloSIM_Offaixs_Siemens');
 params.noise_level = 0.01;       
 params.NA_SIM = 1.2;   
-params.dx_gt = 2.5e-9;   % 高分辨率GT网格，仅用于生成样本
+params.dx_gt = 2.5e-9;   %only use for generating samples
 
 % -------------------------------------------------------------------------
 % Reconstruction / export control
