@@ -2,13 +2,13 @@ function [phase_flat, amplitude] = OA_DemodulatePhase2(hologram_input, params, m
     hologram = double(hologram_input);
     [Nx, Ny] = size(hologram);
     
-    % --- 1. 0频去除 ---
+    % --- 1. 0-frquency removal ---
     sigma_bg = 50; 
     I_on_axis_sim = imgaussfilt(hologram, sigma_bg); 
     hologram_no_dc = hologram - I_on_axis_sim;
     hologram_ready = hologram_no_dc / std(hologram_no_dc(:));
     % hologram_ready = hologram / std(hologram(:));
-    % --- 2. 傅里叶变换与寻峰 ---
+    % --- 2. Fourier transform and Peak detection ---
     H = fft2(hologram_ready);
     H_shift = fftshift(H);
     H_mag = abs(H_shift);
@@ -38,7 +38,7 @@ function [phase_flat, amplitude] = OA_DemodulatePhase2(hologram_input, params, m
         [peak_x_int, peak_y_int] = ind2sub([Nx, Ny], idx);
     end
     
-    % 质心法亚像素寻峰
+    % sub-pixel peak detection
     if peak_x_int > 3 && peak_x_int < Nx-3 && peak_y_int > 3 && peak_y_int < Ny-3
         win_radius = 3; 
         row_idx = (peak_x_int - win_radius) : (peak_x_int + win_radius);
@@ -58,7 +58,7 @@ function [phase_flat, amplitude] = OA_DemodulatePhase2(hologram_input, params, m
         peak_x_final = peak_x_int; peak_y_final = peak_y_int;
     end
     
-    % --- 3. 非对称超高斯滤波 ---
+    % --- 3. Gaussian filtering ---
     dist_to_0_order = sqrt((peak_x_final - center_x)^2 + (peak_y_final - center_y)^2);
     theta = atan2(center_x - peak_x_final, center_y - peak_y_final); 
 %     multi = 1.5;
@@ -74,7 +74,6 @@ function [phase_flat, amplitude] = OA_DemodulatePhase2(hologram_input, params, m
     filter_mask = exp(-(D_squared.^n_order)); 
     H_filtered = H_shift .* filter_mask;
     % =========================================================
-    %% ===================== [附加] 频域滤波效果全景可视化检查 =====================
     % h_diag_fig = figure('Name', '频域滤波效果检查 - 诊断面板', 'Color', 'w', 'Position', [100, 200, 1500, 450]);
     % log_H_shift = log(1 + abs(H_shift));
     % log_H_filtered = log(1 + abs(H_filtered));
@@ -93,7 +92,7 @@ function [phase_flat, amplitude] = OA_DemodulatePhase2(hologram_input, params, m
     % imagesc(log_H_filtered); colormap(jet); colorbar;
     % title('3. 切除后的纯净 +1 级物光 (Log)'); axis image;
 
-    % --- 4. 空域移频与解调 ---
+    % --- 4. Frequency shifiting and demodulation ---
     object_wave_carrier = ifft2(ifftshift(H_filtered));
     fx = (peak_y_final - center_y) / Ny; 
     fy = (peak_x_final - center_x) / Nx; 
@@ -107,9 +106,6 @@ function [phase_flat, amplitude] = OA_DemodulatePhase2(hologram_input, params, m
     phase = angle(object_wave);
     
     % --- 5. Background alignment and optional phase unwrapping ---
-    % The Siemens phase step is below pi, so true phase wrapping is not expected.
-    % DCT unwrapping on a high-contrast Siemens star can create spoke-dependent
-    % deformation. Therefore the optimized default skips unwrapping.
     amp_norm = amplitude / max(amplitude(:));
     thresh = graythresh(amp_norm);
     cell_mask_hard = amp_norm > thresh;
