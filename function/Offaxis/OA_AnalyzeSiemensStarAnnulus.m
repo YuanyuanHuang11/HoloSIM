@@ -1,13 +1,13 @@
 function analysis = OA_AnalyzeSiemensStarAnnulus(img, GT, params)
     if ~isfield(params, 'siemens')
-        error('params.siemens 未定义。');
+        error('params.siemens not defined');
     end
 
     Nlp = GT.siemens.num_line_pairs;
     center_x = params.N/2 + 1;
     center_y = params.N/2 + 1;
 
-    ring_halfwidth_px = 1.5;    % 每条圆环在径向上做少量平均，提高稳健性
+    ring_halfwidth_px = 1.5;    
     n_r_avg = 5;
     n_theta = 720;
 
