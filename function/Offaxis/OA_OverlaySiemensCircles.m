@@ -14,7 +14,6 @@ function OA_OverlaySiemensCircles(ax, GT, params, line_spec, line_width)
         plot(ax, center_x + rr*cos(tt), center_y + rr*sin(tt), line_spec, 'LineWidth', line_width);
     end
 
-    % 额外叠加 Siemens star 有效外边界
     rr_outer = GT.siemens.star_radius_m / params.dx;
     plot(ax, center_x + rr_outer*cos(tt), center_y + rr_outer*sin(tt), 'w-', 'LineWidth', 1.0);
 end
