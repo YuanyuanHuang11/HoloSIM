@@ -21,7 +21,7 @@ function OA_AddResolutionMarker(ax, x_nm, label_text, line_color, y_text, plot_s
         h_align = 'right';
     end
 
-    % 自动限制文字位置，避免顶部显示不全
+
     y_text = min(y_text, yl(2) - 0.08 * yr);
     y_text = max(y_text, yl(1) + 0.25 * yr);
 
