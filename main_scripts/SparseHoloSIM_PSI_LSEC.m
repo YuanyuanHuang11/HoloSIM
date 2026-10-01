@@ -33,7 +33,7 @@ params.z_sample = 10e-9;
 params.noise_level = 0.3;
 params.save_path = fullfile(task_dir, 'results', 'SparseHoloSIM_PSI_LSEC');
 
-% Synthetic LESC target parameters copied from EXP2_5.
+% Synthetic LESC phase-amplitude target parameters.
 params.lesc.phase_model = 'synthetic LESC phase-amplitude target';
 params.lesc.background_amp = 0.5;
 params.lesc.cell_amp = 0.8;
@@ -77,7 +77,7 @@ params.sparse.blend_psi = 1;
 params.sparse.blend_offaxis = 1;
 params.sparse.debug = false;
 
-% Export intermediate Sparse-HoloSIM workflow materials for manual figure assembly.
+% Export intermediate Sparse-HoloSIM workflow materials.
 % These are saved only for the four-step PSI Sparse-HoloSIM branch.
 params.sparse.save_workflow_materials = true;
 params.sparse.workflow_export_branch = 'PSI sparse';
@@ -90,7 +90,7 @@ params.sparse.workflow_export_fig = false;
 params.sim.illum_period_nm = 250;
 params.sim.snr = 20;
 
-% Display and ROI parameters copied from EXP2_5.
+% Display and ROI parameters.
 params.display.roi_center_um = [-4.6, 8.7];
 params.display.roi_halfwidth_um = 4.0;
 params.display.show_scalebar = false;
@@ -123,7 +123,7 @@ params.plot.export_fig = false;
 params.plot.auto_export_figures = false;
 params.plot.make_diagnostic_figures = false; % skip large before/after/error/improvement tiled figures
 
-% Export each key result as a clean standalone phase image for manual layout.
+% Export each key result as a standalone phase image.
 % The exported maps contain only the full-cell phase image itself (no axes, no
 % embedded colorbar). A single unified phase colorbar is exported separately.
 params.plot.export_individual_results = true;
@@ -138,8 +138,7 @@ phase_shift_names = {'0', '90', '180', '270'};
 params.psi.theta_deg = 180;
 params.psi.alpha = 0;
 
-% Off-axis settings retained only for archival reproducibility.
-% The off-axis reconstruction branch is disabled in this fast PSI-only version.
+% Off-axis parameters are defined for completeness; the branch is disabled here.
 params.offaxis.enable = false;
 params.offaxis.theta_deg = 110;
 params.offaxis.alpha_list = [0, pi/2];
@@ -344,8 +343,7 @@ set(h_map, 'Visible', 'on'); figure(h_map);
 drawnow limitrate nocallbacks;
 
 %% 6b. Optional lightweight diagnostic figures
-% Disabled by default because the former 12/13-column 1024x1024 tiled figures
-% consume substantial graphics memory and are the main source of UI stalls.
+% Optional diagnostic figures are disabled by default.
 h_sparse = gobjects(0); h_err = gobjects(0); h_improve = gobjects(0);
 if isfield(params.plot, 'make_diagnostic_figures') && params.plot.make_diagnostic_figures
     fprintf('>>> Step 6b: generate reduced four-method sparse diagnostics\n');
@@ -394,14 +392,14 @@ if isfield(params.plot, 'export_individual_results') && params.plot.export_indiv
     PSI_ExportStandalonePhaseColorbar(fullfile(individual_dir, 'Unified_phase_colorbar'), cmin, cmax, params);
 end
 
-% Do not auto-export the large composite map by default. If explicitly enabled,
+% Export the composite map only when explicitly enabled.
 if isfield(params.plot, 'auto_export_figures') && params.plot.auto_export_figures
     PSI_ExportPublicationFigure(h_map, fullfile(params.save_path, 'PSI_LESC_map_comparison'), params.plot);
     if ~isempty(h_sparse) && isgraphics(h_sparse)
         PSI_ExportPublicationFigure(h_sparse, fullfile(params.save_path, 'PSI_LESC_sparse_comparison'), params.plot);
     end
 else
-    fprintf('    large composite auto-export disabled to avoid MATLAB graphics stalls.\n');
+    fprintf('    Composite figure auto-export is disabled.\n');
 end
 
 fprintf('>>> Done. PSI-only LESC comparison finished.\n');

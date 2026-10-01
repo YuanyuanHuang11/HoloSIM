@@ -37,7 +37,7 @@ params.SIM_lambda = 488e-9;
 params.NA_SIM = 1.2;
 params.z_sample = 10e-9;
 
-% Fixed experimental condition requested by the user.
+% Fixed simulation conditions.
 params.noise_level = 0.05;
 params.siemens.phase_step = 1.5;     % retained field name for compatibility with existing functions
 params.sample.type = 'multipattern_board';

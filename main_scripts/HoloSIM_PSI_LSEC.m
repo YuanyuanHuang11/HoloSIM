@@ -37,7 +37,7 @@ params.SIM_lambda = 488e-9;
 params.NA_SIM = 1.2;
 params.z_sample = 10e-9;
 
-% Fixed experimental condition requested by the user.
+% Fixed simulation conditions.
 params.noise_level = 0.01;
 params.siemens.phase_step = 1.5;     % retained field name for compatibility with existing functions
 params.sample.type = 'LESC';
@@ -77,12 +77,12 @@ params.sim.mod_factor = 0.70;
 params.sim.camera_downsample_scale = 0.5;  % use camera pixel integration, not bicubic resize
 
 % SIM reconstruction mode.
-% 'hybrid_fixed' is the polished compromise used here. It estimates one fixed
-% SIM operator from a conservative mean-plus-contrast reference of the four PSI
-% raw SIM frames.  Compared with 'mean_fixed', it keeps more modulation/detail;
-% compared with 'rms_fixed', it does not over-amplify periodic background
-% stripes; compared with 'per_frame', it keeps the four PSI frames under one
-% common SIM operator.
+% 'hybrid_fixed' estimates one shared SIM operator from a mean-plus-contrast
+% reference constructed from the four PSI raw SIM frames. Compared with
+% 'mean_fixed', it retains more modulation contrast; compared with
+% 'rms_fixed', it reduces amplification of periodic background
+% structure while keeping all four PSI frames under a common
+% reconstruction operator.
 % Other supported modes: 'mean_fixed', 'rms_fixed', 'phase1_fixed', 'per_frame'.
 params.sim.recon_mode = 'per_frame';
 params.sim.fixed_ref_mode = 'hybrid';
@@ -102,7 +102,7 @@ params.recon.bg_dilate_px = 20;
 params.recon.robust_background_fit = true;
 params.recon.background_fit_order = 'plane';
 params.recon.set_outer_background_to_zero = false;
-params.recon.match_PSI_background = false;   % IMPORTANT: do not force the four PSI frames to the same DC level
+params.recon.match_PSI_background = false;   % Preserve phase-dependent PSI intensity offsets
 params.recon.match_PSI_background_strength = 0.00;
 params.recon.destripe_SIM_holograms = true;
 params.recon.holo_destripe_strength = 0.30;
@@ -169,7 +169,7 @@ params.plot.use_fast_imwrite_export = true;
 params.plot.use_safe_raster_comparison = true;   % direct imwrite montage; avoids MATLAB figure infrastructure export errors
 params.plot.use_safe_raster_profile = true;      % direct imwrite profile plot; avoids print()/ViewModel hangs
 params.plot.use_safe_raster_zoom = true;         % direct imwrite local zoom montage
-params.plot.disable_matlab_figure_export = true; % never call print/exportgraphics/saveas in unstable graphics sessions
+params.plot.disable_matlab_figure_export = true;
 params.plot.full_comparison_panel_px = 900;      % pixel size of each tile in direct raster montage
 params.plot.individual_panel_px = 1800;
 params.plot.colorbar_px_h = 1800;

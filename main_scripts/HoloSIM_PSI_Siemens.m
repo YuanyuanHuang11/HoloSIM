@@ -13,9 +13,8 @@
 %   PsfOtf, OTF, SIMimagesF, PCMseparateF, OBJpowerPara,
 %   PCMfilteringF, OTFdoubling, MergingHeptaletsF
 %
-% Important: unlike the debugging script, the four phase-shifted holograms are
-% normalized by one shared factor only. They are NOT min-max normalized frame by
-% frame before PSI.
+% The four phase-shifted holograms share one normalization factor to preserve
+% their relative intensities before PSI.
 
 clear; close all; clc;
 task_dir = fileparts(mfilename('fullpath'));
@@ -23,15 +22,10 @@ project_root = fileparts(task_dir);
 addpath(genpath(fullfile(project_root, 'function')));
 
 
-% Main-result version:
-%   - Uses fixed-parameter SIM reconstruction for all four phase-shifted holograms.
-%   - Uses pixel-integrated camera sampling instead of bicubic downsampling.
-%   - Keeps H_tra, H_inc, and final HoloSIM phase-frequency response.
-%   - Affine correction and constant phase compensation are removed from main analysis.
-%
+% The analysis uses a shared fixed-parameter SIM operator, pixel-integrated
+% camera sampling, and separate H_tra, H_inc, and final phase-response analyses.
 
-% Figure style: compact Nature-style display.
-% Keep the numerical pipeline unchanged; only the plotting layer is changed.
+% Figure settings for publication-quality output.
 set(groot, 'defaultAxesFontName', 'Arial');
 set(groot, 'defaultTextFontName', 'Arial');
 set(groot, 'defaultLegendFontName', 'Arial');
@@ -60,11 +54,10 @@ Ccol.pink   = PSI_hex2rgb('#CC79A7');
 Ccol.gray   = PSI_hex2rgb('#7A7A7A');
 Ccol.lightgray = PSI_hex2rgb('#D9D9D9');
 
-% outdir = fullfile(pwd, 'HoloSIM_main_fixedSIM_pixelIntegration_noAffine_results_z10');
 outdir = fullfile(task_dir, 'results', 'HoloSIM_PSI_Siemens');
 if ~exist(outdir, 'dir'), mkdir(outdir); end
 
-%% Parameters matching the previously stable Siemens SIM reconstruction
+%% Optical and reconstruction parameters
 S.N = 1024;
 S.dx = 32.5e-9;
 S.dy = S.dx;
@@ -84,8 +77,8 @@ S.ref.theta_deg = 180;                  % in-plane reference azimuth label, deg
 S.ref.lateral_frequency = 0;            % cycles/m; zero means no off-axis carrier
 S.ref.use_lateral_carrier = false;      % false = pure four-step PSI, no off-axis term
 S.phase_shifts = [0 pi/2 pi 3*pi/2];
-S.sim.illum_period_nm = 250;   % match stable Siemens code
-S.sim.snr = 1e2;               % deterministic debug; set 20 or 60 for noisy synthetic runs
+S.sim.illum_period_nm = 250;
+S.sim.snr = 1e2;               % Signal-to-noise ratio used in the simulated SIM readout
 S.sim.camera_downsample_scale = 0.5;  % 32.5 nm -> 65 nm camera pixels
 S.recon.holo_denoise_sigma_px = 0;
 
@@ -114,14 +107,14 @@ else
     set(groot, 'defaultFigureVisible', 'off');
 end
 
-% Siemens target similar to previous stable code.
+% Siemens-star phase target.
 C.num_spokes = 72;
 C.num_line_pairs = C.num_spokes/2;
 C.radius_frac = 0.78;
 C.inner_radius = 300e-9;
 C.phase_step = 1.0;
 C.edge_sigma_px = 0.8;
-C.supersample = 8;  % use 8 to exactly match the older script, 4 is faster
+C.supersample = 8;  % Subpixel supersampling factor
 
 fprintf('H_inc + phase-response analysis. Output: %s\n', outdir);
 fprintf('SIM grid dx = %.1f nm, camera pixel = %.1f nm, SIM period = %.0f nm, SNR = %.1f\n', ...
@@ -574,7 +567,7 @@ T_bg_offsets = table(phi_qpm_cam_bg_median, phi_film_directPSI_bg_median, phi_fi
 
 % -------------------------------------------------------------------------
 % SIM artifact diagnostics.
-% Pixel-integrated camera sampling removes the previous vertical-stripe
+% Pixel-integrated camera sampling suppresses sampling-related vertical-stripe
 % artifact. We keep raw SIM error diagnostics only; no affine correction is
 % applied or reported in the main analysis.
 % -------------------------------------------------------------------------

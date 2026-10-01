@@ -462,7 +462,7 @@ Sprofile.plot.saveMode = 'pngpainters';
 Sprofile.plot.exportDPI = 600;
 Sprofile.plot.closeSavedFigures = false;
 PSI_safeSaveFigure_TP(fig, fullfile(outdir,'TwoPoint_profiles_100_130_160_nature.png'), Sprofile);
-% Keep the old filename as an alias for compatibility with earlier notes.
+% Save an additional alias for compatibility with existing downstream scripts.
 SprofileAlias = Sprofile;
 SprofileAlias.plot.closeSavedFigures = true;
 PSI_safeSaveFigure_TP(fig, fullfile(outdir,'TwoPoint_profiles_metrics_nature.png'), SprofileAlias);
